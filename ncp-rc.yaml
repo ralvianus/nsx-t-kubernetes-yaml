@@ -1,0 +1,271 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nsx-ncp-config
+  namespace: nsx-system
+  labels:
+    version: v1
+data:
+  ncp.ini: |
+
+    [DEFAULT]
+
+    # If set to true, the logging level will be set to DEBUG instead of the
+    # default INFO level.
+    #debug = False
+
+    # If set to true, log output to standard error.
+    #use_stderr = True
+
+    # If set to true, use syslog for logging.
+    #use_syslog = False
+
+    # The base directory used for relative log_file paths.
+    #log_dir = <None>
+
+    # Name of log file to send logging output to.
+    #log_file = <None>
+
+    # max MB for each compressed file. Defaults to 100 MB.
+    #log_rotation_file_max_mb = 100
+
+    # Total number of compressed backup files to store. Defaults to 5.
+    #log_rotation_backup_count = 5
+
+    # Specify the directory where nsx-python-logging is installed
+    #nsx_python_logging_path = /opt/vmware/nsx-common/python
+
+    # Specify the directory where nsx-cli is installed
+    #nsx_cli_path = /opt/vmware/nsx-cli/bin/python
+
+
+    [nsx_v3]
+
+    nsx_api_managers = 192.168.110.201
+    nsx_api_user = admin
+    nsx_api_password = VMware1!VMware1!
+    insecure = True
+    log_dropped_traffic = True
+
+    use_native_loadbalancer = True
+    pool_algorithm = ROUND_ROBIN
+    service_size = SMALL
+    virtual_servers_per_lbs = 10
+
+    container_ip_blocks = ea99a1ae-6f7d-42c3-aabc-f4ee3dcc9bf7
+    external_ip_pools = 9fb89adf-f262-46ee-9863-1dea08fa6966
+    overlay_tz = 97edd78b-6527-4895-b7fc-7c7d88d911aa
+    top_firewall_section_marker = bd4e7c4d-329b-47b4-ae77-9cacca8dc983
+    bottom_firewall_section_marker = 407602bd-7ec0-4142-9163-b7671b538c4a
+    top_tier_router = 0a3014af-af18-4dbe-8f7e-38c70e8a222b
+    edge_cluster = c6f0a14e-ea95-4f95-884c-873723eabee2
+
+    [ha]
+
+
+    # Time duration in seconds of mastership timeout. NCP instance will remain
+    # master for this duration after elected. Note that the heartbeat period
+    # plus the update timeout must not be greater than this period. This is
+    # done to ensure that the master instance will either confirm liveness or
+    # fail before the timeout.
+    #master_timeout = 18
+
+    # Time in seconds between heartbeats for elected leader. Once an NCP
+    # instance is elected master, it will periodically confirm liveness based
+    # on this value.
+    #heartbeat_period = 6
+
+    # Timeout duration in seconds for update to election resource. The default
+    # value is calculated by subtracting heartbeat period from master timeout.
+    # If the update request does not complete before the timeout it will be
+    # aborted. Used for master heartbeats to ensure that the update finishes or
+    # is aborted before the master timeout occurs.
+    #update_timeout = <None>
+
+
+    [coe]
+
+    # Container orchestrator adaptor to plug in.
+    #adaptor = kubernetes
+
+    # Specify cluster for adaptor.
+    cluster = kube-cluster
+
+    # Log level for NCP operations
+    # Choices: NOTSET DEBUG INFO WARNING ERROR CRITICAL
+    #loglevel = <None>
+
+    # Log level for NSX API client operations
+    # Choices: NOTSET DEBUG INFO WARNING ERROR CRITICAL
+    nsxlib_loglevel = INFO
+
+    # Enable SNAT for all projects in this cluster
+    #enable_snat = True
+
+    # Option to enable profiling
+    #profiling = False
+
+    # The type of container host node
+    # Choices: HOSTVM BAREMETAL CLOUD WCP_WORKER
+    node_type = BAREMETAL
+
+    # The time in seconds for NCP/nsx_node_agent to recover the connection to
+    # NSX manager/container orchestrator adaptor/Hyperbus before exiting. If
+    # the value is 0, NCP/nsx_node_agent won't exit automatically when the
+    # connection check fails
+    #connect_retry_timeout = 0
+
+
+
+    [k8s]
+
+    # Kubernetes API server IP address.
+    apiserver_host_ip = 192.168.110.11
+
+    # Kubernetes API server port.
+    apiserver_host_port = 6443
+
+    # Full path of the Token file to use for authenticating with the k8s API
+    # server.
+    client_token_file = /var/run/secrets/kubernetes.io/serviceaccount/token
+
+    # Full path of the client certificate file to use for authenticating with
+    # the k8s API server. It must be specified together with
+    # "client_private_key_file".
+    #client_cert_file = <None>
+
+    # Full path of the client private key file to use for authenticating with
+    # the k8s API server. It must be specified together with
+    # "client_cert_file".
+    #client_private_key_file = <None>
+
+    # Specify a CA bundle file to use in verifying the k8s API server
+    # certificate.
+    ca_file = /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+
+    # Specify whether ingress controllers are expected to be deployed in
+    # hostnework mode or as regular pods externally accessed via NAT
+    # Choices: hostnetwork nat
+    #ingress_mode = hostnetwork
+
+    # Log level for the kubernetes adaptor
+    # Choices: NOTSET DEBUG INFO WARNING ERROR CRITICAL
+    loglevel = INFO
+
+    # The default HTTP ingress port
+    #http_ingress_port = 80
+
+    # The default HTTPS ingress port
+    #https_ingress_port = 443
+
+
+    # Specify thread pool size to process resource events
+    #resource_watcher_thread_pool_size = 1
+
+    # User specified IP address for HTTP and HTTPS ingresses
+    #http_and_https_ingress_ip = <None>
+
+    # Set this to True to enable NCP to create segment port for VM through
+    # NsxNetworkInterface CRD.
+    #enable_nsx_netif_crd = False
+
+    # Option to set the type of baseline cluster policy. ALLOW_CLUSTER creates
+    # an explicit baseline policy to allow any pod to communicate any other pod
+    # within the cluster. ALLOW_NAMESPACE creates an explicit baseline policy
+    # to allow pods within the same namespace to communicate with each other.
+    # By default, no baseline rule will be created and the cluster will assume
+    # the default behavior as specified by the backend.
+    # Choices: <None> allow_cluster allow_namespace
+    #baseline_policy_type = <None>
+
+
+
+    #[nsx_v3]
+    # Deprecated option: tier0_router
+    # Replaced by [nsx_v3] top_tier_router
+
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  # VMware NSX Container Plugin
+  name: nsx-ncp
+  namespace: nsx-system
+  labels:
+    tier: nsx-networking
+    component: nsx-ncp
+    version: v1
+spec:
+  # Active-Standby is supported from NCP 2.4.0 release,
+  # so replica can be more than 1 if NCP HA is enabled.
+  # replica *must be* 1 if NCP HA is disabled.
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        tier: nsx-networking
+        component: nsx-ncp
+        version: v1
+    spec:
+      # NCP shares the host management network.
+      hostNetwork: true
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+      # If configured with ServiceAccount, update the ServiceAccount
+      # name below.
+      serviceAccountName: ncp-svc-account
+      containers:
+        - name: nsx-ncp
+          # Docker image for NCP
+          image: nsx-ncp
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NCP_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NCP_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - timeout 5 check_pod_liveness nsx-ncp
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+            periodSeconds: 10
+            failureThreshold: 5
+          volumeMounts:
+          - name: config-volume
+            # NCP expects ncp.ini is present in /etc/nsx-ujo
+            mountPath: /etc/nsx-ujo/ncp.ini
+            subPath: ncp.ini
+            readOnly: true
+          # To use cert based auth, uncomment the volumeMount
+          # Update ncp.ini with the mounted cert and key file paths
+          #- name: nsx-cert
+          #  mountPath: /etc/nsx-ujo/nsx-cert
+          #  readOnly: true
+          # To add default LB cert, uncomment the volumeMount
+          # Update ncp.ini with the mounted cert and key file paths
+          #- name: lb-cert
+          #  mountPath: /etc/nsx-ujo/lb-cert
+          #  readOnly: true
+      volumes:
+        - name: config-volume
+          # ConfigMap nsx-ncp-config is expected to supply ncp.ini
+          configMap:
+            name: nsx-ncp-config
+        # To use cert based auth, uncomment and update the secretName
+        #- name: nsx-cert
+        #  secret:
+        #    secretName: nsx-secret
+        # To add default LB cert, uncomment and update the secretName
+        #- name: lb-cert
+        #  secret:
+        #    secretName: lb-secret
